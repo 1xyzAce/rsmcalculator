@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSM CALCULATOR</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: rgb(27, 27, 33);
+            color: rgb(255, 255, 255);
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 15px;
+            background: rgb(42, 41, 55);
+            border-radius: 2px; /* Increased from 8px */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: rgb(115, 115, 255);
+            font-size: 38px;
+        }
+        h2 {
+            color: rgb(115, 115, 255);
+            font-size: 14px;
+        }
+        label {
+            display: block;
+            margin-top: 8px;
+            color: rgb(255, 255, 255);
+        }
+        input, select {
+            width: 97%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid rgb(115, 115, 255);
+            border-radius: 2px; /* Increased from 4px */
+            background-color: rgb(27, 27, 33);
+            color: rgb(255, 255, 255);
+        }
+        button, .link-button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 25px;
+            background: rgb(27, 27, 33);
+            border: none;
+            border-radius: 2px; /* Increased from 4px */
+            color: rgb(115, 115, 255); /* Blue text color */
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+        button:hover, .link-button:hover {
+            background: rgb(30, 30, 40); /* Darker background on hover */
+        }
+        .result {
+            margin-top: 15px;
+            padding: 8px;
+            background: rgb(27, 27, 33);
+            border: 1px solid rgb(115, 115, 255);
+            border-radius: 8px; /* Increased from 4px */
+        }
+        .result p {
+            margin: 0;
+            color: rgb(135, 248, 100);
+        }
+        .author {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: rgb(115, 115, 255);
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .separator {
+            height: 4px;
+            margin: 30px 0;
+            background-color: rgb(133, 133, 255);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RSM CALCULATOR</h1>
+        
+        <div class="section">
+            <h2>1. XP Needed To Go From Current Level To Desired Level</h2>
+            <label for="currentLevel1">Enter your current level:</label>
+            <input type="number" id="currentLevel1" min="0" step="1">
+            <label for="chosenLevel1">Enter your desired level:</label>
+            <input type="number" id="chosenLevel1" min="0" step="1">
+            <button onclick="calculate1()">Calculate</button>
+            <div id="result1" class="result"></div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="section">
+            <h2>2. Total XP Needed For A Level</h2>
+            <label for="chosenLevel2">Enter your desired level:</label>
+            <input type="number" id="chosenLevel2" min="0" step="1">
+            <button onclick="calculate2()">Calculate</button>
+            <div id="result2" class="result"></div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="section">
+            <h2>3. Convert XP To A Value Of kills</h2>
+            <label for="xp3">Enter the amount of XP:</label>
+            <input type="number" id="xp3" min="0" step="1">
+            <button onclick="calculate3()">Calculate</button>
+            <div id="result3" class="result"></div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="section">
+            <h2>4. Convert Value Of kills To A Level & XP</h2>
+            <label for="kills4">Enter the value of kills:</label>
+            <input type="number" id="kills4" min="0" step="1">
+            <button onclick="calculate4()">Calculate</button>
+            <div id="result4" class="result"></div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="author">
+            <p>Author: tmp</p>
+            <p>Discord: tmpy_</p>
+            <div class="separator"></div>
+            <a href="https://cfx.re/join/vjarme" class="link-button">Connect To RSM #1</a>
+            <a href="https://cfx.re/join/wqxomp" class="link-button">Connect To RSM #2</a>
+        </div>
+    </div>
+
+    <script>
+        function formatNumber(number) {
+            return number.toLocaleString();
+        }
+
+        function xpNeeded(level) {
+            return Math.round(60 * level * level - 60);
+        }
+
+        function totalXpForLevelRange(currentLevel, chosenLevel) {
+            let totalXp = 0;
+            for (let level = currentLevel; level < chosenLevel; level++) {
+                totalXp += xpNeeded(level + 1) - xpNeeded(level);
+            }
+            return totalXp;
+        }
+
+        function killsNeededForXp(xp) {
+            const xpPerKill = 150;
+            return Math.round(xp / xpPerKill);
+        }
+
+        function xpToKills(xp) {
+            return Math.round(xp / 150);
+        }
+
+        function killsToXp(kills) {
+            return Math.round(kills * 150);
+        }
+
+        function levelForXp(xp) {
+            return Math.round(Math.sqrt((xp + 60) / 60));
+        }
+
+        function calculate1() {
+            const currentLevel = parseInt(document.getElementById('currentLevel1').value);
+            const chosenLevel = parseInt(document.getElementById('chosenLevel1').value);
+            const resultDiv = document.getElementById('result1');
+            let result = '';
+
+            if (!isNaN(currentLevel) && !isNaN(chosenLevel) && currentLevel <= chosenLevel) {
+                const xpNeededToReachChosenLevel = totalXpForLevelRange(currentLevel, chosenLevel);
+                result = `<p>Total XP needed to go from level ${formatNumber(currentLevel)} to level ${formatNumber(chosenLevel)} is ${formatNumber(xpNeededToReachChosenLevel)} XP!</p>`;
+            } else {
+                result = '<p>Please enter valid levels with the chosen level greater than or equal to the current level.</p>';
+            }
+
+            resultDiv.innerHTML = result;
+        }
+
+        function calculate2() {
+            const chosenLevel = parseInt(document.getElementById('chosenLevel2').value);
+            const resultDiv = document.getElementById('result2');
+            let result = '';
+
+            if (!isNaN(chosenLevel)) {
+                const xpForChosenLevel = xpNeeded(chosenLevel);
+                result = `<p>To reach level ${formatNumber(chosenLevel)} requires ${formatNumber(xpForChosenLevel)} XP!</p>`;
+            } else {
+                result = '<p>Please enter a valid level.</p>';
+            }
+
+            resultDiv.innerHTML = result;
+        }
+
+        function calculate3() {
+            const xp = parseInt(document.getElementById('xp3').value);
+            const resultDiv = document.getElementById('result3');
+            let result = '';
+
+            if (!isNaN(xp)) {
+                const kills = xpToKills(xp);
+                result = `<p>${formatNumber(xp)} XP is equivalent to approximately ${formatNumber(kills)} pvp kills!</p>`;
+            } else {
+                result = '<p>Please enter a valid XP amount.</p>';
+            }
+
+            resultDiv.innerHTML = result;
+        }
+
+        function calculate4() {
+            const kills = parseInt(document.getElementById('kills4').value);
+            const resultDiv = document.getElementById('result4');
+            let result = '';
+
+            if (!isNaN(kills)) {
+                const xp = killsToXp(kills);
+                const level = levelForXp(xp);
+                result = `<p>${formatNumber(kills)} pvp kills give you ${formatNumber(xp)} XP, which would place you at approximately level ${formatNumber(level)}!</p>`;
+            } else {
+                result = '<p>Please enter a valid number of kills';
+            }
+
+            resultDiv.innerHTML = result;
+        }
+    </script>
+</body>
+</html>
